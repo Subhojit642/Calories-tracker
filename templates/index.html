@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Calorie Dashboard</title>
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul><li><strong>🔥 My Calorie Tracker</strong></li></ul>
+        </nav>
+
+        <article>
+            <header>Weekly Progress</header>
+            <canvas id="calorieChart"></canvas>
+        </article>
+
+        <figure>
+            <table>
+                <thead>
+                    <tr><th>Date</th><th>Food Item</th><th>Calories</th></tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log[2] }}</td>
+                        <td>{{ log[0] }}</td>
+                        <td>{{ log[1] }} kcal</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </figure>
+    </main>
+
+    <script>
+        const ctx = document.getElementById('calorieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ dates | tojson }},
+                datasets: [{
+                    label: 'Calories Consumed',
+                    data: {{ totals | tojson }},
+                    borderColor: '#10ad8d',
+                    tension: 0.1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
